@@ -1,0 +1,40 @@
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  
+</head>
+<body>
+  <script src="/~partytown/partytown.js"></script>
+  <button id="calc"> Calculate PI</button>
+  <textarea name="" id="pi" cols="30" rows="10"></textarea>
+  <script type="text/partytown"> 
+    <!--  type="text/partytown" will execute on the browser and not on main thread -->
+      function * generateDigitsOfPi() {
+          let q = 1n;
+          let r = 180n;
+          let t = 60n;
+          let i = 2n;
+          while (true) {
+              let digit = ((i * 27n - 12n) * q + r * 5n) / (t * 5n);
+              yield Number(digit);
+              let u = i * 3n;
+              u = (u + 1n) * 3n * (u + 2n);
+              r = u * 10n * (q * (i * 5n - 2n) + r - t * digit);
+              q *= 10n * i * (i++ * 2n - 1n);
+              t *= u;
+          }
+      }
+      function display()   {
+        let iter = generateDigitsOfPi();
+        let digits = "";
+        for (let i = 0; i < 20000; i++) digits += iter.next().value;
+        document.getElementById("pi").value = (digits);
+      };
+      document.getElementById("calc").addEventListener("click", display);
+    
+  </script>
+</body>
+</html>
